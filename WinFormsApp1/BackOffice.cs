@@ -51,14 +51,14 @@ namespace WinFormsApp1
             foreach (var file in filesEdgeChain)
             {
 
-                BackOffice office = new BackOffice { Path = FileVersionInfo.GetVersionInfo(file).FileName, Edition = FileVersionInfo.GetVersionInfo(file).FileVersion, Version = "Chain" };
+                BackOffice office = new BackOffice { Path = FileVersionInfo.GetVersionInfo(file).FileName, Version = FileVersionInfo.GetVersionInfo(file).FileVersion, Edition = "Chain" };
                 backOfficeDirectories.Add(office);
 
             }
 
             foreach (var file in filesEdgeDefault)
             {
-                BackOffice office = new BackOffice { Path = FileVersionInfo.GetVersionInfo(file).FileName, Edition = FileVersionInfo.GetVersionInfo(file).FileVersion, Version = "Default" };
+                BackOffice office = new BackOffice { Path = FileVersionInfo.GetVersionInfo(file).FileName, Version = FileVersionInfo.GetVersionInfo(file).FileVersion, Edition = "Default" };
                 backOfficeDirectories.Add(office);
             }
             return backOfficeDirectories;

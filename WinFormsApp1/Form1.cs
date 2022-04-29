@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
@@ -5,6 +7,116 @@ namespace WinFormsApp1
         public Form1()
         {
             InitializeComponent();
+            GridUpdate();
+
+        }
+        private void GridUpdate()
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var servers = db.Servers.ToList();
+                dataGridViewServers.DataSource = servers;
+                var offices = db.BackOffice.ToList();
+                dataGridViewBackOffices.DataSource = offices;
+            }
+        }
+
+        private void btn_AddServer_Click(object sender, EventArgs e)
+        {
+            BackClient backClient = new BackClient();
+            string mUrl = tb_Url.Text;
+            string url = backClient.NormilizeURL(mUrl);
+            var serverProperties = backClient.GetServerProperties(url);
+            if (ServerAlreadyExist(url) != true )
+            {
+                //if (ServerNeedUpdate(url, serverProperties.Version) == true)
+                //{
+                //    UpdateServer(url);
+                //}
+                AddServer();
+
+
+            }
+            else { MessageBox.Show("Server already exist!"); }
+
+           
+            tb_Url.Clear();
+        }
+        private bool ServerAlreadyExist(string url)
+        {
+            bool exist = false;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                foreach (var server in db.Servers)
+                {
+                    if (server.URL == url)
+                    { exist = true; }
+
+
+                }
+
+            }
+            return exist;
+        }
+        //private bool ServerNeedUpdate(string url, string version)
+        //{
+        //   bool need = false;
+        //   BackClient backClient = new BackClient();
+        //   var serverProperties = backClient.GetServerProperties(url);
+        //    if (serverProperties.Version != version)
+        //   {
+        //        need = true;
+        //   }
+                
+         
+        //    return need;
+        //}
+       
+        private void AddServer()
+        {
+            BackClient backClient = new BackClient();
+            string mUrl = tb_Url.Text;
+            string url = backClient.NormilizeURL(mUrl);
+            var serverProperties = backClient.GetServerProperties(url);
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                try
+                {
+
+                    Servers server = new Servers();
+                    server.Edition = serverProperties.Edition;
+                    server.Version = serverProperties.Version;
+                    server.URL = url;
+                    db.Servers.Add(server);
+                    db.SaveChanges();
+                    MessageBox.Show("Объекты успешно сохранены");
+                    //var servers = db.Servers.ToList();
+                    //dataGridViewServers.DataSource = servers;
+                    GridUpdate();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        //private void UpdateServer(string url)
+        //{
+        //    using (ApplicationContext db = new ApplicationContext())
+        //    {
+        //        foreach (var server in db.Servers)
+        //        {
+        //            BackClient backClient = new BackClient();
+        //            var serverProperties = backClient.GetServerProperties(url);
+        //            server.Version = serverProperties.Version;
+        //            db.Servers.Update(server);
+        //            db.SaveChanges();
+        //            MessageBox.Show("Server version update!");
+        //        }
+        //    }
+        //}
+        private void btn_SearchBackOffice_Click(object sender, EventArgs e)
+        {
             using (ApplicationContext db = new ApplicationContext())
             {
                 BackOffice backOffice = new BackOffice();
@@ -21,10 +133,97 @@ namespace WinFormsApp1
                 MessageBox.Show("Объекты успешно сохранены");
 
                 // получаем объекты из бд и выводим на консоль
-                var offices = db.BackOffice.ToList();
-                dataGridView1.DataSource = offices;
+                //var offices = db.BackOffice.ToList();
+                //dataGridViewBackOffices.DataSource = offices;
+                GridUpdate();
 
             }
+        }
+
+        private void btn_OpenBackOffice_Click(object sender, EventArgs e)
+        {
+            var server = dataGridViewServers.CurrentRow;
+            var version = server.Cells[2].Value.ToString();
+            var edition = server.Cells[3].Value.ToString();
+            var url = server.Cells[1].Value.ToString();
+            //if (ServerNeedUpdate(url,version))
+            //{
+            //    UpdateServer(url);
+            //}
+
+            try
+            {
+                
+
+                string pathToBackOffice = Match(version,edition);
+                if (pathToBackOffice != null)
+                {
+                    Open(pathToBackOffice);
+                }
+                else
+                {
+                    MessageBox.Show("pathToBackOffice Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            var login = tb_Login.Text;
+            var passwd = tb_Passwd.Text;
+            if (login != null && passwd != null)
+            {
+                BackClient backClient = new BackClient();
+                backClient.BackClientConfigEdit(url, login);
+                Authorization authorization = new Authorization();
+                authorization.AuthorizationMetod(passwd);
+            }
+            else { MessageBox.Show("login and password are empty"); }
+
+        }
+        private string Match(string version, string edition)
+        {
+            string pathToBackOffice = null;
+ 
+
+            if (version != null && edition != null)
+            {
+                using (ApplicationContext db = new ApplicationContext())
+                {
+                    db.BackOffice.ToList();
+                    foreach (var file in db.BackOffice.ToList())
+                    {
+                        if (file.Version.ToLower() == version.ToLower() && edition.ToLower() == file.Edition.ToLower())
+                        {
+                            pathToBackOffice = file.Path.ToString();
+                        }
+                        else
+                        {
+
+
+                        }
+                    }
+                }
+            }
+            else { MessageBox.Show("version and edition not found"); }
+            return pathToBackOffice;
+            
+        }
+        private void Open(string pathToBackOffice)
+        {
+            try
+            {
+                using (Process myProcess = new Process())
+                {
+                    myProcess.StartInfo.UseShellExecute = false;
+                    myProcess.StartInfo.FileName = pathToBackOffice;
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.Start();
+                }
+            }
+            catch (Exception ex)
+            { MessageBox.Show(ex.Message); }
         }
     }
 }
