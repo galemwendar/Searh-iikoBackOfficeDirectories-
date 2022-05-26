@@ -1,11 +1,16 @@
+
+using System.Data;
 using System.Diagnostics;
 
 namespace WinFormsApp1
 {
+    
     public partial class Form1 : Form
     {
+        public string mName = string.Empty;
         public Form1()
         {
+
             InitializeComponent();
             GridUpdate();
 
@@ -41,6 +46,7 @@ namespace WinFormsApp1
 
            
             tb_Url.Clear();
+            tb_CustomName.Clear();
         }
         private bool ServerAlreadyExist(string url)
         {
@@ -76,6 +82,7 @@ namespace WinFormsApp1
         {
             BackClient backClient = new BackClient();
             string mUrl = tb_Url.Text;
+            string customName = tb_CustomName.Text;
             string url = backClient.NormilizeURL(mUrl);
             var serverProperties = backClient.GetServerProperties(url);
             using (ApplicationContext db = new ApplicationContext())
@@ -87,6 +94,7 @@ namespace WinFormsApp1
                     server.Edition = serverProperties.Edition;
                     server.Version = serverProperties.Version;
                     server.URL = url;
+                    server.ServerCustomName = customName;
                     db.Servers.Add(server);
                     db.SaveChanges();
                     MessageBox.Show("Объекты успешно сохранены");
@@ -172,7 +180,7 @@ namespace WinFormsApp1
             
             var login = tb_Login.Text;
             var passwd = tb_Passwd.Text;
-            if (login != null && passwd != null)
+            if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(passwd) != null)
             {
                 BackClient backClient = new BackClient();
                 backClient.BackClientConfigEdit(url, login);
@@ -224,6 +232,117 @@ namespace WinFormsApp1
             }
             catch (Exception ex)
             { MessageBox.Show(ex.Message); }
+        }
+
+        private void btn_CloseAllBackClient_Click(object sender, EventArgs e)
+        {
+           
+            BackClient backClient = new BackClient();
+            backClient.CloseBackOffice();
+        }
+
+        private void tb_Search_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_Search.Text != null )
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                    var servers = db.Servers.ToList().FindAll(x => x.URL.Contains($"{tb_Search.Text.ToLower()}"));
+                        if (servers != null)
+                        {
+                            dataGridViewServers.DataSource = servers;
+                        }
+                }
+        }
+
+        private void tb_Url_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem_Open_Click(object sender, EventArgs e)
+        {
+            var server = dataGridViewServers.CurrentRow;
+            var version = server.Cells[2].Value.ToString();
+            var edition = server.Cells[3].Value.ToString();
+            var url = server.Cells[1].Value.ToString();
+            //if (ServerNeedUpdate(url,version))
+            //{
+            //    UpdateServer(url);
+            //}
+
+            try
+            {
+
+
+                string pathToBackOffice = Match(version, edition);
+                if (pathToBackOffice != null)
+                {
+                    Open(pathToBackOffice);
+                }
+                else
+                {
+                    MessageBox.Show("pathToBackOffice Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            var login = tb_Login.Text;
+            var passwd = tb_Passwd.Text;
+            if (login != null && passwd != null)
+            {
+                BackClient backClient = new BackClient();
+                backClient.BackClientConfigEdit(url, login);
+                Authorization authorization = new Authorization();
+                authorization.AuthorizationMetod(passwd);
+            }
+            else { MessageBox.Show("login and password are empty"); }
+
+        }
+
+        public void toolStripMenuItem_NameChange_Click(object sender, EventArgs e)
+        {
+            
+            var currentServer = dataGridViewServers.CurrentRow;
+            try
+            {
+                NameForm nameDialog = new NameForm
+                {
+                    Owner = this
+                };
+                nameDialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            using (ApplicationContext db = new ApplicationContext())
+            {
+               var server = db.Servers.ToList().FindAll(x => x.URL.Contains(currentServer.Cells[1].Value.ToString()));
+                if (server != null)
+                {
+                    foreach (var s in server)
+                    {
+                        s.ServerCustomName = mName;
+                        db.Update(s);
+                        db.SaveChanges();
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Server for name change not found!");
+                }
+            }
+
+            GridUpdate();
+        }
+
+        private void toolStripMenuItem_Delete_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
