@@ -27,7 +27,7 @@ namespace WinFormsApp1
         public ServerProperties GetServerProperties(string mUrl)
         {
 
-            
+
 
             var url = NormilizeURL(mUrl) + "/get_server_info.jsp?encoding=UTF-8";
             UrlService urlService = new UrlService();

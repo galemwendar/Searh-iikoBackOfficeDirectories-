@@ -1,10 +1,8 @@
-
-using System.Data;
 using System.Diagnostics;
 
 namespace WinFormsApp1
 {
-    
+
     public partial class Form1 : Form
     {
         public string mName = string.Empty;
@@ -32,7 +30,7 @@ namespace WinFormsApp1
             string mUrl = tb_Url.Text;
             string url = backClient.NormilizeURL(mUrl);
             var serverProperties = backClient.GetServerProperties(url);
-            if (ServerAlreadyExist(url) != true )
+            if (ServerAlreadyExist(url) != true)
             {
                 //if (ServerNeedUpdate(url, serverProperties.Version) == true)
                 //{
@@ -44,7 +42,7 @@ namespace WinFormsApp1
             }
             else { MessageBox.Show("Server already exist!"); }
 
-           
+
             tb_Url.Clear();
             tb_CustomName.Clear();
         }
@@ -73,11 +71,11 @@ namespace WinFormsApp1
         //   {
         //        need = true;
         //   }
-                
-         
+
+
         //    return need;
         //}
-       
+
         private void AddServer()
         {
             BackClient backClient = new BackClient();
@@ -161,9 +159,9 @@ namespace WinFormsApp1
 
             try
             {
-                
 
-                string pathToBackOffice = Match(version,edition);
+
+                string pathToBackOffice = Match(version, edition);
                 if (pathToBackOffice != null)
                 {
                     Open(pathToBackOffice);
@@ -177,7 +175,7 @@ namespace WinFormsApp1
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
             var login = tb_Login.Text;
             var passwd = tb_Passwd.Text;
             if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(passwd) != null)
@@ -193,7 +191,7 @@ namespace WinFormsApp1
         private string Match(string version, string edition)
         {
             string pathToBackOffice = null;
- 
+
 
             if (version != null && edition != null)
             {
@@ -216,7 +214,7 @@ namespace WinFormsApp1
             }
             else { MessageBox.Show("version and edition not found"); }
             return pathToBackOffice;
-            
+
         }
         private void Open(string pathToBackOffice)
         {
@@ -236,21 +234,22 @@ namespace WinFormsApp1
 
         private void btn_CloseAllBackClient_Click(object sender, EventArgs e)
         {
-           
+
             BackClient backClient = new BackClient();
             backClient.CloseBackOffice();
         }
 
         private void tb_Search_TextChanged(object sender, EventArgs e)
         {
-            if (tb_Search.Text != null )
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                    var servers = db.Servers.ToList().FindAll(x => x.URL.Contains($"{tb_Search.Text.ToLower()}"));
-                        if (servers != null)
-                        {
-                            dataGridViewServers.DataSource = servers;
-                        }
+            if (tb_Search.Text != null)
+                using (ApplicationContext db = new ApplicationContext())
+                {
+                    var servers = db.Servers.ToList().FindAll(x => x.URL.Contains($"{tb_Search.Text.ToLower()}") || x.ServerCustomName.Contains($"{tb_Search.Text.ToLower()}") ||
+                                    x.Version.Contains($"{tb_Search.Text.ToLower()}") || x.Edition.Contains($"{tb_Search.Text.ToLower()}"));
+                    if (servers != null)
+                    {
+                        dataGridViewServers.DataSource = servers;
+                    }
                 }
         }
 
@@ -304,7 +303,7 @@ namespace WinFormsApp1
 
         public void toolStripMenuItem_NameChange_Click(object sender, EventArgs e)
         {
-            
+
             var currentServer = dataGridViewServers.CurrentRow;
             try
             {
@@ -320,7 +319,7 @@ namespace WinFormsApp1
             }
             using (ApplicationContext db = new ApplicationContext())
             {
-               var server = db.Servers.ToList().FindAll(x => x.URL.Contains(currentServer.Cells[1].Value.ToString()));
+                var server = db.Servers.ToList().FindAll(x => x.URL.Contains(currentServer.Cells[1].Value.ToString()));
                 if (server != null)
                 {
                     foreach (var s in server)

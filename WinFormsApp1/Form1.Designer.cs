@@ -58,6 +58,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btn_SaveProps = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackOffices)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewServers)).BeginInit();
             this.contextMenuStrip_Servers.SuspendLayout();
@@ -156,7 +157,7 @@
             this.btn_SearchBackOffice.Name = "btn_SearchBackOffice";
             this.btn_SearchBackOffice.Size = new System.Drawing.Size(171, 48);
             this.btn_SearchBackOffice.TabIndex = 4;
-            this.btn_SearchBackOffice.Text = "Search";
+            this.btn_SearchBackOffice.Text = "Поиск";
             this.btn_SearchBackOffice.UseVisualStyleBackColor = true;
             this.btn_SearchBackOffice.Click += new System.EventHandler(this.btn_SearchBackOffice_Click);
             // 
@@ -167,7 +168,7 @@
             this.btn_OpenBackOffice.Name = "btn_OpenBackOffice";
             this.btn_OpenBackOffice.Size = new System.Drawing.Size(139, 48);
             this.btn_OpenBackOffice.TabIndex = 5;
-            this.btn_OpenBackOffice.Text = "Open";
+            this.btn_OpenBackOffice.Text = "Открыть";
             this.btn_OpenBackOffice.UseVisualStyleBackColor = true;
             this.btn_OpenBackOffice.Click += new System.EventHandler(this.btn_OpenBackOffice_Click);
             // 
@@ -192,7 +193,7 @@
             this.btn_CloseAllBackClient.Name = "btn_CloseAllBackClient";
             this.btn_CloseAllBackClient.Size = new System.Drawing.Size(145, 48);
             this.btn_CloseAllBackClient.TabIndex = 8;
-            this.btn_CloseAllBackClient.Text = "Close All";
+            this.btn_CloseAllBackClient.Text = "Закрыть все";
             this.btn_CloseAllBackClient.UseVisualStyleBackColor = true;
             this.btn_CloseAllBackClient.Click += new System.EventHandler(this.btn_CloseAllBackClient_Click);
             // 
@@ -216,7 +217,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(1008, 660);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Servers";
+            this.tabPage1.Text = "Список серверов";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
@@ -274,11 +275,11 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(449, 21);
+            this.label5.Location = new System.Drawing.Point(490, 21);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(78, 20);
+            this.label5.Size = new System.Drawing.Size(39, 20);
             this.label5.TabIndex = 8;
-            this.label5.Text = "Add name";
+            this.label5.Text = "Имя";
             // 
             // tb_CustomName
             // 
@@ -300,20 +301,20 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 47);
+            this.label2.Location = new System.Drawing.Point(46, 47);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 20);
+            this.label2.Size = new System.Drawing.Size(52, 20);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Search";
+            this.label2.Text = "Поиск";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 21);
+            this.label1.Location = new System.Drawing.Point(46, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 20);
+            this.label1.Size = new System.Drawing.Size(60, 20);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Add server";
+            this.label1.Text = "Сервер";
             // 
             // tabPage2
             // 
@@ -323,7 +324,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1008, 660);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Clients";
+            this.tabPage2.Text = "Бэкофисы";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel2
@@ -343,6 +344,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btn_SaveProps);
             this.tabPage3.Controls.Add(this.label4);
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.tb_Login);
@@ -352,7 +354,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(1008, 660);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Properties";
+            this.tabPage3.Text = "Настройки";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -360,18 +362,27 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 110);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 20);
+            this.label4.Size = new System.Drawing.Size(62, 20);
             this.label4.TabIndex = 9;
-            this.label4.Text = "Password";
+            this.label4.Text = "Пароль";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 22);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 20);
+            this.label3.Size = new System.Drawing.Size(52, 20);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Login";
+            this.label3.Text = "Логин";
+            // 
+            // btn_SaveProps
+            // 
+            this.btn_SaveProps.Location = new System.Drawing.Point(141, 192);
+            this.btn_SaveProps.Name = "btn_SaveProps";
+            this.btn_SaveProps.Size = new System.Drawing.Size(94, 29);
+            this.btn_SaveProps.TabIndex = 10;
+            this.btn_SaveProps.Text = "Сохранить";
+            this.btn_SaveProps.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -429,5 +440,6 @@
         private ToolStripMenuItem toolStripMenuItem_Open;
         private ToolStripMenuItem toolStripMenuItem_Delete;
         private Label label5;
+        private Button btn_SaveProps;
     }
 }
