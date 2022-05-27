@@ -6,11 +6,13 @@ namespace WinFormsApp1
     public partial class Form1 : Form
     {
         public string mName = string.Empty;
+
         public Form1()
         {
 
             InitializeComponent();
             GridUpdate();
+            CheckPropetries();
 
         }
         private void GridUpdate()
@@ -21,6 +23,18 @@ namespace WinFormsApp1
                 dataGridViewServers.DataSource = servers;
                 var offices = db.BackOffice.ToList();
                 dataGridViewBackOffices.DataSource = offices;
+            }
+        }
+        private void CheckPropetries()
+        {
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Login) || string.IsNullOrEmpty(Properties.Settings.Default.Passwd))
+            {
+                MessageBox.Show("Настройки пусты");
+            }
+            else
+            {
+                tb_Login.Text = Properties.Settings.Default.Login;
+                tb_Passwd.Text = Properties.Settings.Default.Passwd;
             }
         }
 
@@ -244,8 +258,8 @@ namespace WinFormsApp1
             if (tb_Search.Text != null)
                 using (ApplicationContext db = new ApplicationContext())
                 {
-                    var servers = db.Servers.ToList().FindAll(x => x.URL.Contains($"{tb_Search.Text.ToLower()}") || x.ServerCustomName.Contains($"{tb_Search.Text.ToLower()}") ||
-                                    x.Version.Contains($"{tb_Search.Text.ToLower()}") || x.Edition.Contains($"{tb_Search.Text.ToLower()}"));
+                    var servers = db.Servers.ToList().FindAll(x => x.URL.Contains($"{tb_Search.Text}") || x.ServerCustomName.Contains($"{tb_Search.Text}") ||
+                                    x.Version.Contains($"{tb_Search.Text}") || x.Edition.Contains($"{tb_Search.Text}"));
                     if (servers != null)
                     {
                         dataGridViewServers.DataSource = servers;
@@ -342,6 +356,24 @@ namespace WinFormsApp1
         private void toolStripMenuItem_Delete_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btn_SaveProps_Click(object sender, EventArgs e)
+        {
+            if (tb_Login.Text !=null && tb_Login.Text.Length > 0 && tb_Passwd.Text != null && tb_Passwd.Text.Length > 0)
+            {
+                Properties.Settings.Default.Login = tb_Login.Text;
+                Properties.Settings.Default.Passwd = tb_Passwd.Text;
+                Properties.Settings.Default.Save();
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.Login) && !string.IsNullOrEmpty(Properties.Settings.Default.Passwd))
+                {
+                    MessageBox.Show("Настройки сохранены!");
+                }
+                else
+                { MessageBox.Show("Настройки не сохранены!"); }
+                { MessageBox.Show("Настройки не сохранены!"); }
+                
+            }
         }
     }
 }

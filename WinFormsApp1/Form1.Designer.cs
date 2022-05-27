@@ -56,9 +56,9 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btn_SaveProps = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btn_SaveProps = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackOffices)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewServers)).BeginInit();
             this.contextMenuStrip_Servers.SuspendLayout();
@@ -357,6 +357,16 @@
             this.tabPage3.Text = "Настройки";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // btn_SaveProps
+            // 
+            this.btn_SaveProps.Location = new System.Drawing.Point(141, 192);
+            this.btn_SaveProps.Name = "btn_SaveProps";
+            this.btn_SaveProps.Size = new System.Drawing.Size(94, 29);
+            this.btn_SaveProps.TabIndex = 10;
+            this.btn_SaveProps.Text = "Сохранить";
+            this.btn_SaveProps.UseVisualStyleBackColor = true;
+            this.btn_SaveProps.Click += new System.EventHandler(this.btn_SaveProps_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -374,15 +384,6 @@
             this.label3.Size = new System.Drawing.Size(52, 20);
             this.label3.TabIndex = 8;
             this.label3.Text = "Логин";
-            // 
-            // btn_SaveProps
-            // 
-            this.btn_SaveProps.Location = new System.Drawing.Point(141, 192);
-            this.btn_SaveProps.Name = "btn_SaveProps";
-            this.btn_SaveProps.Size = new System.Drawing.Size(94, 29);
-            this.btn_SaveProps.TabIndex = 10;
-            this.btn_SaveProps.Text = "Сохранить";
-            this.btn_SaveProps.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
